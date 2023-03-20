@@ -4,6 +4,8 @@
 # Press Double Shift to search everywhere for classes, files, tool windows, actions, and settings.
 import scipy
 import pandas
+import tensorflow as tf
+
 
 def print_hi():
     url = "https://raw.githubusercontent.com/jbrownlee/Datasets/master/pima-indians-diabetes.data.csv"
