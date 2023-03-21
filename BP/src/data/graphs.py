@@ -1,7 +1,6 @@
-import numpy as np
 import matplotlib
 import matplotlib.pyplot as plt
-from wordcloud import WordCloud, STOPWORDS, ImageColorGenerator
+from wordcloud import WordCloud, STOPWORDS
 from data import data_reader
 matplotlib.use('TkAgg')
 
