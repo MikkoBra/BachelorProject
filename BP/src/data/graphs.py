@@ -23,17 +23,25 @@ def class_percent_graph():
     plt.show()
 
 
+# Create a word cloud out of all social media texts per emotion classification
 def word_cloud():
+    # List the 7 emotions
     df = data_reader.read_train_data()
     emotions = df['emotion'].unique()
     print(emotions)
+
     for emotion in emotions:
+        # Reduce dataframe to texts from one emotion
         essays_by_emotion = df.loc[df['emotion'] == emotion, 'essay']
+        # Join all texts
         text = " ".join(essay for essay in essays_by_emotion)
+        # Define words to filter out (based on visual analysis)
         stopwords = set(STOPWORDS)
         stopwords.update(["people", "really", "article", "think", "will", "make", "need", "know", "one", "thing"])
-        wordcloud = WordCloud(stopwords=stopwords, max_words=100, background_color="white", colormap="viridis").generate(text)
-        # Display the generated image:
+        # Create wordcloud
+        wordcloud = WordCloud(stopwords=stopwords, max_words=100, background_color="white", colormap="viridis")\
+            .generate(text)
+        # Display wordcloud
         plt.imshow(wordcloud, interpolation='bilinear')
         plt.axis("off")
         plt.show()
