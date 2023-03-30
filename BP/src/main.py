@@ -1,5 +1,5 @@
-from data import graphs
+from models import nn_classifier
 
 if __name__ == '__main__':
-    graphs.word_cloud()
-
+    nn_classifier.create_clean_data()
+    nn_classifier.train_network()

@@ -1,7 +1,7 @@
 import matplotlib
 import matplotlib.pyplot as plt
 from wordcloud import WordCloud, STOPWORDS
-from data import data_reader
+from data import data_processing
 matplotlib.use('TkAgg')
 
 
@@ -26,7 +26,7 @@ def class_percent_graph():
 # Create a word cloud out of all social media texts per emotion classification
 def word_cloud():
     # List the 7 emotions
-    df = data_reader.read_train_data()
+    df = data_processing.read_train_data()
     emotions = df['emotion'].unique()
     print(emotions)
 
