@@ -1,19 +1,20 @@
-from sklearn.model_selection import train_test_split
-from numpy import array
-from keras.utils import plot_model
-from keras.utils import to_categorical
-from keras.models import Model
-from keras.layers import Input
 from keras.layers import Dense
-from keras.layers import Flatten
 from keras.layers import Dropout
 from keras.layers import Embedding
+from keras.layers import Flatten
+from keras.layers import Input
 from keras.layers import concatenate
 from keras.layers.convolutional import Conv1D
 from keras.layers.convolutional import MaxPooling1D
+from keras.models import Model
+from keras.utils import plot_model
+from keras.utils import to_categorical
+from sklearn.model_selection import train_test_split
+
 from data.data_processing import *
 
 
+# Cleans text datasets and saves them to local files
 def create_clean_data():
     data = read_train_data()
     # data
@@ -26,7 +27,7 @@ def create_clean_data():
     clean_and_save(x_test, y_test, 'test_clean.pkl')
 
 
-# define the model
+# Define the model
 def define_model(length, voc_size):
     # channel 1
     inputs1 = Input(shape=(length,))
@@ -63,16 +64,24 @@ def define_model(length, voc_size):
     return model
 
 
+# Trains a neural network on the cleaned training data
 def train_network():
+    # Retrieve train data from file
     train_text, train_labels = load_dataset('train_clean.pkl')
+    # Convert labels to one_hot matrices
     one_hot_labels = to_categorical(train_labels)
+    # Create tokenizer
     tokenizer = create_tokenizer(train_text)
+
     length = max_length(train_text)
     voc_size = vocab_size(tokenizer)
-    print(length, voc_size)
-    train_x = pad_tokenizer(tokenizer, train_text, length)
-    model = define_model(length, voc_size)
-    print(train_x.shape)
-    model.fit([train_x, train_x, train_x], one_hot_labels, epochs=20, verbose=2)
-    model.save('nn_model.h5')
 
+    # Convert training string data to padded encoded data
+    train_x = encode_and_pad(tokenizer, train_text, length)
+    # Create model
+    model = define_model(length, voc_size)
+    # Fit model on training data
+    model.fit([train_x, train_x, train_x], one_hot_labels, epochs=20, verbose=2)
+
+    # Save model for later evaluation with test set
+    model.save('nn_model.h5')
