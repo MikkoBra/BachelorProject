@@ -4,9 +4,12 @@ from pickle import load
 from string import punctuation
 
 import pandas as pd
+import numpy as np
 from keras.preprocessing.text import Tokenizer
 from keras.utils import pad_sequences
+from keras.models import load_model
 from nltk.corpus import stopwords
+from sklearn.model_selection import train_test_split
 
 
 # Reads the training data into a dataframe and reduces it to relevant features
@@ -124,3 +127,16 @@ def encode_and_pad(tokenizer, data, length):
     print(length)
     padded = pad_sequences(encoded, maxlen=length, padding='post')
     return padded
+
+
+# Cleans text datasets and saves them to local files
+def create_clean_data():
+    data = read_train_data()
+    # data
+    x = data['essay']
+    # labels
+    y = data['emotion']
+    # 10/90 split data into train and test (X) data, with labels (Y) for each
+    x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.10, random_state=1)
+    clean_and_save(x_train, y_train, 'train_clean.pkl')
+    clean_and_save(x_test, y_test, 'test_clean.pkl')
