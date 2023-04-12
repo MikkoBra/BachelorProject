@@ -1,5 +1,9 @@
-from models import nn_classifier
+from initialize.training import train_network
+from data.data_processing import create_clean_data
 
 if __name__ == '__main__':
-    nn_classifier.create_clean_data()
-    nn_classifier.train_network()
+    create_clean_data()
+    train_network('cnn')
+    train_network('rnn')
+    train_network('lstm')
+    train_network('mlp')
