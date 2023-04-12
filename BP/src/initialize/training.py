@@ -4,24 +4,22 @@ from data.data_processing import *
 from initialize.mlp import mlp_model
 from initialize.cnn import cnn_model
 from initialize.rnn import rnn_model
-
-
-def lstm_model():
-    return 0
+from initialize.lstm import lstm_model
 
 
 def create_model(nn_type, length, voc_size, train_x, train_y):
     if nn_type == "cnn":
         model = cnn_model(length, voc_size)
-        model.fit([train_x, train_x, train_x], train_y, epochs=50, verbose=2)
+        model.fit([train_x, train_x, train_x], train_y, epochs=10, verbose=2)
     elif nn_type == "rnn":
         model = rnn_model(length, voc_size)
-        model.fit(train_x, train_y, epochs=50, verbose=2)
+        model.fit(train_x, train_y, epochs=10, verbose=2)
     elif nn_type == "mlp":
         model = mlp_model(length)
         model.fit(train_x, train_y, epochs=50, verbose=2)
     else:
-        model = lstm_model()
+        model = lstm_model(length, voc_size)
+        model.fit(train_x, train_y, epochs=50, verbose=2)
     return model
 
 
