@@ -25,7 +25,6 @@ def create_model(nn_type, length, voc_size, train_x, train_y):
 
 # Trains a neural network on the cleaned training data
 # TODO: attention layer
-# TODO: lstm
 # TODO: word2vec
 def train_network(nn_type):
     # Retrieve train data from file
