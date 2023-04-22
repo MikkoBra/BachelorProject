@@ -23,7 +23,7 @@ def create_model(nn_type, length, voc_size):
 # TODO: word2vec
 def save_network(nn_type):
     # Retrieve train data from file
-    x, y = load_dataset('all_data_clean.pkl')
+    x, y = load_dataset('datasets/all_data_clean.pkl')
     # Create tokenizer
     tokenizer = create_tokenizer(x)
 

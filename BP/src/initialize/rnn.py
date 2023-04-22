@@ -11,5 +11,5 @@ def rnn_model(length, voc_size):
     model = Model(inputs=inputs, outputs=outputs)
     model.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['accuracy'])
     print(model.summary())
-    plot_model(model, show_shapes=True, to_file='rnn.png')
+    plot_model(model, show_shapes=True, to_file='images/rnn.png')
     return model

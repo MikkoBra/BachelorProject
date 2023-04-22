@@ -6,7 +6,7 @@ from numpy import mean, std
 
 
 def kfold(nn_type):
-    x, y = load_dataset('all_data_clean.pkl')
+    x, y = load_dataset('data/all_data_clean.pkl')
     data, one_hot = preprocess_clean_data(x, y)
     model = load_network(nn_type)
     estimator = KerasClassifier(build_fn=model, epochs=10)

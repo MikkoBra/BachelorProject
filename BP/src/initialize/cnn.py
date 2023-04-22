@@ -44,5 +44,5 @@ def cnn_model(length, voc_size):
     model.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
     # summarize
     print(model.summary())
-    plot_model(model, show_shapes=True, to_file='cnn.png')
+    plot_model(model, show_shapes=True, to_file='images/cnn.png')
     return model

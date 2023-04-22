@@ -17,5 +17,5 @@ def lstm_model(length, voc_size):
     model = Model(inputs=inputs, outputs=outputs)
     model.compile(optimizer=optimizer, loss='categorical_crossentropy', metrics=['accuracy'])
     print(model.summary())
-    plot_model(model, show_shapes=True, to_file='lstm.png')
+    plot_model(model, show_shapes=True, to_file='images/lstm.png')
     return model

@@ -13,7 +13,7 @@ def fit_validation(nn_type, model, train_x, train_y):
 
 
 def train_validation(nn_type):
-    x, y = load_dataset('train_data_clean.pkl')
+    x, y = load_dataset('datasets/train_data_clean.pkl')
     model = load_network(nn_type)
     model = fit_validation(nn_type, model, x, y)
 
@@ -22,7 +22,7 @@ def train_validation(nn_type):
 
 
 def test(nn_type):
-    x, y = load_dataset('test_data_clean.pkl')
+    x, y = load_dataset('datasets/test_data_clean.pkl')
     model = load_network(nn_type + '_val')
     if nn_type == 'cnn':
         scores = model.evaluate([x, x, x], y)

@@ -146,8 +146,8 @@ def create_clean_data():
     # labels
     y = data['emotion']
     clean_data, clean_labels = clean(x, y)
-    dump([clean_data, clean_labels], open('all_data_clean.pkl', 'wb'))
-    print('Saved: all_data_clean.pkl')
+    dump([clean_data, clean_labels], open('datasets/all_data_clean.pkl', 'wb'))
+    print('Saved: datasets/all_data_clean.pkl')
 
 
 def split_data(x, y, test_size):
@@ -156,12 +156,12 @@ def split_data(x, y, test_size):
 
 
 def save_train_test():
-    x, y = load_dataset('all_data_clean.pkl')
+    x, y = load_dataset('datasets/all_data_clean.pkl')
     clean_x, clean_y = preprocess_clean_data(x, y)
 
     # 80/20 split data into train and test (X) data, with labels (Y) for each
     x_train, x_test, y_train, y_test = split_data(clean_x, clean_y, 0.20)
-    dump([x_train, y_train], open('train_data_clean.pkl', 'wb'))
-    print('Saved: train_data_clean.pkl')
-    dump([x_train, y_train], open('test_data_clean.pkl', 'wb'))
-    print('Saved: test_data_clean.pkl')
+    dump([x_train, y_train], open('datasets/train_data_clean.pkl', 'wb'))
+    print('Saved: datasets/train_data_clean.pkl')
+    dump([x_train, y_train], open('datasets/test_data_clean.pkl', 'wb'))
+    print('Saved: datasets/test_data_clean.pkl')

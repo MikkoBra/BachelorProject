@@ -20,5 +20,5 @@ def mlp_model(length):
     model.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
     # summarize
     print(model.summary())
-    plot_model(model, show_shapes=True, to_file='mlp.png')
+    plot_model(model, show_shapes=True, to_file='images/mlp.png')
     return model
