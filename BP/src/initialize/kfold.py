@@ -5,6 +5,7 @@ from initialize.generator import load_network
 from numpy import mean, std
 
 
+# TODO: implement kfold yourself
 def kfold(nn_type):
     x, y = load_dataset('data/all_data_clean.pkl')
     data, one_hot = preprocess_clean_data(x, y)
