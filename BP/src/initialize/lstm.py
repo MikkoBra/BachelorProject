@@ -13,7 +13,7 @@ def lstm_model(length, voc_size):
     lstm = LSTM(100)(embedding)
     dropout = Dropout(0.2)(lstm)
     outputs = Dense(7, activation='softmax')(dropout)
-    optimizer = Adam(lr=0.01)
+    optimizer = Adam(learning_rate=0.01)
     model = Model(inputs=inputs, outputs=outputs)
     model.compile(optimizer=optimizer, loss='categorical_crossentropy', metrics=['accuracy'])
     print(model.summary())

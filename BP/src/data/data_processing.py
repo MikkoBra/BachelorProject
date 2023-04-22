@@ -7,6 +7,7 @@ import pandas as pd
 import numpy as np
 from keras.preprocessing.text import Tokenizer
 from keras.utils import pad_sequences
+from keras.utils import to_categorical
 from keras.models import load_model
 from nltk.corpus import stopwords
 from sklearn.model_selection import train_test_split
@@ -60,14 +61,13 @@ def convert_labels(labels):
 
 
 # Cleans a text dataset and saves the cleaned data to a given filename
-def clean_and_save(data, labels, filename):
+def clean(data, labels):
     lambda_clean = lambda x: clean_essay(x, False)
     # Clean essay texts
     data = data.apply(lambda_clean)
     # Convert labels to integers
     labels = convert_labels(labels)
-    dump([data, labels], open(filename, 'wb'))
-    print('Saved: %s' % filename)
+    return data, labels
 
 
 # Saves the vocabulary of a dataset
@@ -129,14 +129,39 @@ def encode_and_pad(tokenizer, data, length):
     return padded
 
 
+def preprocess_clean_data(x, y):
+    tokenizer = create_tokenizer(x)
+    length = max_length(x)
+    data = encode_and_pad(tokenizer, x, length)
+    one_hot = to_categorical(y)
+    return data, one_hot
+
+
 # Cleans text datasets and saves them to local files
+# TODO: oversampling
 def create_clean_data():
     data = read_train_data()
     # data
     x = data['essay']
     # labels
     y = data['emotion']
-    # 10/90 split data into train and test (X) data, with labels (Y) for each
-    x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.10, random_state=1)
-    clean_and_save(x_train, y_train, 'train_clean.pkl')
-    clean_and_save(x_test, y_test, 'test_clean.pkl')
+    clean_data, clean_labels = clean(x, y)
+    dump([clean_data, clean_labels], open('all_data_clean.pkl', 'wb'))
+    print('Saved: all_data_clean.pkl')
+
+
+def split_data(x, y, test_size):
+    # 80/20 split data into train and test (X) data, with labels (Y) for each
+    return train_test_split(x, y, test_size=test_size, random_state=1)
+
+
+def save_train_test():
+    x, y = load_dataset('all_data_clean.pkl')
+    clean_x, clean_y = preprocess_clean_data(x, y)
+
+    # 80/20 split data into train and test (X) data, with labels (Y) for each
+    x_train, x_test, y_train, y_test = split_data(clean_x, clean_y, 0.20)
+    dump([x_train, y_train], open('train_data_clean.pkl', 'wb'))
+    print('Saved: train_data_clean.pkl')
+    dump([x_train, y_train], open('test_data_clean.pkl', 'wb'))
+    print('Saved: test_data_clean.pkl')
