@@ -1,21 +1,11 @@
 from data.data_processing import *
-from initialize.generator import load_network
-
-
-def fit_validation(nn_type, model, train_x, train_y):
-    if nn_type == "cnn":
-        model.fit([train_x, train_x, train_x], train_y, epochs=10, verbose=2, validation_split=0.25)
-    elif nn_type == "rnn":
-        model.fit(train_x, train_y, epochs=10, verbose=2, validation_split=0.25)
-    else:
-        model.fit(train_x, train_y, epochs=50, verbose=2, validation_split=0.25)
-    return model
+from initialize.generator import load_network, fit_model
 
 
 def train_validation(nn_type):
     x, y = load_dataset('datasets/train_data_clean.pkl')
     model = load_network(nn_type)
-    model = fit_validation(nn_type, model, x, y)
+    model = fit_model(nn_type, model, x, y, 0.25)
 
     model.save('models/' + nn_type + '_val.h5')
     return model

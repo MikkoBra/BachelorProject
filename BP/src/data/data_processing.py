@@ -3,12 +3,11 @@ from pickle import dump
 from pickle import load
 from string import punctuation
 
+import nltk
 import pandas as pd
-import numpy as np
 from keras.preprocessing.text import Tokenizer
 from keras.utils import pad_sequences
 from keras.utils import to_categorical
-from keras.models import load_model
 from nltk.corpus import stopwords
 from sklearn.model_selection import train_test_split
 
@@ -165,3 +164,11 @@ def save_train_test():
     print('Saved: datasets/train_data_clean.pkl')
     dump([x_train, y_train], open('datasets/test_data_clean.pkl', 'wb'))
     print('Saved: datasets/test_data_clean.pkl')
+
+
+def sentences_to_lists(data):
+    tokenized = []
+    for sentence in data:
+        tokens = nltk.word_tokenize(sentence)
+        tokenized.append(tokens)
+    return tokenized
