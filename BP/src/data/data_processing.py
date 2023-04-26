@@ -128,6 +128,7 @@ def encode_and_pad(tokenizer, data, length):
     return padded
 
 
+# Returns cleaned data, and one_hot encoded labels
 def preprocess_clean_data(x, y):
     tokenizer = create_tokenizer(x)
     length = max_length(x)
@@ -149,16 +150,16 @@ def create_clean_data():
     print('Saved: datasets/all_data_clean.pkl')
 
 
+# 80/20 split data into train and test (x) data, with labels (y) for each
 def split_data(x, y, test_size):
-    # 80/20 split data into train and test (X) data, with labels (Y) for each
     return train_test_split(x, y, test_size=test_size, random_state=1)
 
 
+# Split data into train/test, and save into new .pkl files
 def save_train_test():
     x, y = load_dataset('datasets/all_data_clean.pkl')
     clean_x, clean_y = preprocess_clean_data(x, y)
 
-    # 80/20 split data into train and test (X) data, with labels (Y) for each
     x_train, x_test, y_train, y_test = split_data(clean_x, clean_y, 0.20)
     dump([x_train, y_train], open('datasets/train_data_clean.pkl', 'wb'))
     print('Saved: datasets/train_data_clean.pkl')
@@ -166,6 +167,7 @@ def save_train_test():
     print('Saved: datasets/test_data_clean.pkl')
 
 
+# Turn a list of (sentence) strings into a 2D list of tokens
 def sentences_to_lists(data):
     tokenized = []
     for sentence in data:

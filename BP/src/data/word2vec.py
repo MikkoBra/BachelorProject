@@ -6,6 +6,7 @@ from data.data_processing import load_dataset
 from data.data_processing import sentences_to_lists
 
 
+# Generates word2vec embedding and saves it to a .txt file
 def word2vec():
     data, labels = load_dataset('datasets/all_data_clean.pkl')
     sentences = sentences_to_lists(data)
