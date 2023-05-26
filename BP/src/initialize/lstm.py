@@ -16,7 +16,7 @@ def lstm_model(length, voc_size, tokenizer, w2v):
     inputs = Input(shape=(length,))
     # Embedding layer (may implement word2vec)
     if w2v:
-        embedding = embedding_layer(tokenizer, voc_size, length, inputs)
+        embedding = embedding_layer(tokenizer, voc_size, inputs)
     else:
         embedding = Embedding(voc_size, 100)(inputs)
     # LSTM layer
@@ -35,8 +35,6 @@ def lstm_model(length, voc_size, tokenizer, w2v):
 
     # Compile model
     model.compile(optimizer=optimizer, loss='categorical_crossentropy', metrics=['accuracy'])
-    # summarize
-    print(model.summary())
     filename = 'images/lstm_w2v.png' if w2v else 'images/lstm.png'
     plot_model(model, show_shapes=True, to_file=filename)
     return model

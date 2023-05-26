@@ -10,11 +10,11 @@ from initialize.rnn import rnn_model
 
 # Selects the right neural network to generate depending on the passed string parameter nn_type
 def create_model(nn_type, length, voc_size, tokenizer, w2v=False):
-    if nn_type == "cnn":
+    if "cnn" in nn_type:
         model = cnn_model(length, voc_size, tokenizer, w2v)
-    elif nn_type == "rnn":
+    elif "rnn" in nn_type:
         model = rnn_model(length, voc_size, tokenizer, w2v)
-    elif nn_type == "mlp":
+    elif "mlp" in nn_type:
         model = mlp_model(length, voc_size, tokenizer, w2v)
     else:
         model = lstm_model(length, voc_size, tokenizer, w2v)
@@ -22,8 +22,10 @@ def create_model(nn_type, length, voc_size, tokenizer, w2v=False):
 
 
 # Trains a neural network on the cleaned training data
-# TODO: attention layer
 def save_network(nn_type):
+    w2v = False
+    if "w2v" in nn_type:
+        w2v = True
     # Retrieve train data from file
     x, y = load_dataset('datasets/all_data_clean.pkl')
     # Create tokenizer
@@ -33,11 +35,9 @@ def save_network(nn_type):
     voc_size = vocab_size(tokenizer)
 
     # Create model
-    model = create_model(nn_type, length, voc_size, tokenizer)
+    model = create_model(nn_type, length, voc_size, tokenizer, w2v)
     model.save('models/' + nn_type + '.h5')
-    # Create model with word2vec
-    model = create_model(nn_type, length, voc_size, tokenizer, w2v=True)
-    model.save('models/' + nn_type + '_w2v.h5')
+    return tokenizer, length, voc_size
 
 
 # Loads a network from a local .h5 file
@@ -48,11 +48,13 @@ def load_network(filename):
 
 # Selects the right neural network to train depending on the passed string parameter nn_type
 def fit_model(nn_type, model, train_x, train_y, val=0):
-    if nn_type == "cnn" or nn_type == "cnn_w2v":
+    if "cnn" in nn_type:
         # Multi-channel CNN, requires as many inputs as there are channels (3)
         model.fit([train_x, train_x, train_x], train_y, epochs=10, verbose=2, validation_split=val)
-    elif nn_type == "rnn" or nn_type == "rnn_w2v":
-        model.fit(train_x, train_y, epochs=10, verbose=2, validation_split=val)
+    elif "rnn" in nn_type:
+        model.fit(train_x, train_y, epochs=15, verbose=2, validation_split=val)
+    elif "lstm" in nn_type:
+        model.fit(train_x, train_y, epochs=60, verbose=2, validation_split=val)
     else:
         model.fit(train_x, train_y, epochs=50, verbose=2, validation_split=val)
     return model

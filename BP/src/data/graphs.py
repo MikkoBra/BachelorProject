@@ -1,6 +1,7 @@
 import matplotlib
 import matplotlib.pyplot as plt
 from wordcloud import WordCloud, STOPWORDS
+import pandas as pd
 
 from data import data_processing
 
@@ -8,15 +9,23 @@ matplotlib.use('TkAgg')
 
 
 # Plots the distribution of emotion classifications in the dataset in percentages
-def class_percent_graph():
-    # Retrieve count of each emotion, convert to percentage
-    emotion_count = data_processing.read_train_data()['emotion'].value_counts(normalize=True) * 100
+def class_percent_graph(labels, oversampled=False):
+    if oversampled:
+        # Load the clean data after oversampling
+        clean_data, clean_labels = data_processing.load_dataset('datasets/train_data_clean.pkl')
+        clean_labels = data_processing.one_hot_to_int(clean_labels)
+        # Retrieve count of each emotion, convert to percentage
+        emotion_count = pd.Series(clean_labels).value_counts(normalize=True) * 100
+    else:
+        # Retrieve count of each emotion, convert to percentage
+        emotion_count = data_processing.read_train_data()['emotion'].value_counts(normalize=True) * 100
+
     # Sort in ascending order such that highest is plotted higher on y-axis
     emotion_sorted = emotion_count.sort_values(ascending=True)
 
     # Generate plot
     fig, ax = plt.subplots(figsize=(8, 5))
-    bars = ax.barh(emotion_sorted.index, emotion_sorted.values, height=0.5, color=(0.2, 0.4, 0.6, 0.6))
+    bars = ax.barh(labels, emotion_sorted.values.tolist(), height=0.5, color=(0.2, 0.4, 0.6, 0.6))
     ax.bar_label(bars)
     ax.set_ylabel('Emotion', fontsize=12)
     ax.set_xlabel('Percentage of Occurrence', fontsize=12)

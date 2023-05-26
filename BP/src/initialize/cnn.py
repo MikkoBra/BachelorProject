@@ -21,8 +21,8 @@ tf.random.set_seed(7)
 def cnn_model(length, voc_size, tokenizer, w2v=False):
     # Create channels of multi-channel CNN
     flat1, inputs1 = channel(length, voc_size, tokenizer, w2v, 2)
-    flat2, inputs2 = channel(length, voc_size, tokenizer, w2v, 4)
-    flat3, inputs3 = channel(length, voc_size, tokenizer, w2v, 6)
+    flat2, inputs2 = channel(length, voc_size, tokenizer, w2v, 3)
+    flat3, inputs3 = channel(length, voc_size, tokenizer, w2v, 4)
     # merge
     merged = concatenate([flat1, flat2, flat3])
     # interpretation
@@ -36,8 +36,6 @@ def cnn_model(length, voc_size, tokenizer, w2v=False):
 
     # compile
     model.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
-    # summarize
-    print(model.summary())
     filename = 'images/cnn_w2v.png' if w2v else 'images/cnn.png'
     plot_model(model, show_shapes=True, to_file=filename)
     return model
@@ -49,7 +47,7 @@ def channel(length, voc_size, tokenizer, w2v, k_size):
     inputs = Input(shape=(length,))
     # Embedding layer (may implement word2vec)
     if w2v:
-        embedding = embedding_layer(tokenizer, voc_size, length, inputs)
+        embedding = embedding_layer(tokenizer, voc_size, inputs)
     else:
         embedding = Embedding(voc_size, 100)(inputs)
     # Convolutional layer

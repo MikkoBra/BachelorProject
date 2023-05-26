@@ -1,6 +1,7 @@
 from gensim.models import Word2Vec
 from keras.layers import Embedding
-from numpy import asarray, zeros
+import numpy as np
+from numpy import asarray
 
 from data.data_processing import load_dataset
 from data.data_processing import sentences_to_lists
@@ -32,21 +33,23 @@ def load_embedding(filename):
 
 # create a weight matrix for the Embedding layer from a loaded embedding
 def get_weight_matrix(embedding, vocab):
-    # total vocabulary size plus 0 for unknown words
     vocab_size = len(vocab) + 1
-    # define weight matrix dimensions with all 0
-    weight_matrix = zeros((vocab_size, 100))
-    # step vocab, store vectors using the Tokenizer's integer mapping
+    embedding_dim = embedding[next(iter(embedding))].shape[0]
+    weight_matrix = np.zeros((vocab_size, embedding_dim))
     for word, i in vocab.items():
-        weight_matrix[i] = embedding.get(word)
+        embedding_vector = embedding.get(word)
+        if embedding_vector is not None:
+            weight_matrix[i] = embedding_vector
+        else:
+            weight_matrix[i] = np.random.uniform(-0.5, 0.5, embedding_dim)
     return weight_matrix
 
 
-def embedding_layer(tokenizer, vocab_size, length, inputs):
+def embedding_layer(tokenizer, vocab_size, inputs):
     # load embedding from file
     raw_embedding = load_embedding('models/embedding_word2vec.txt')
     # get vectors in the right order
     embedding_vectors = get_weight_matrix(raw_embedding, tokenizer.word_index)
     # create the embedding layer
-    layer = Embedding(vocab_size, 100, weights=[embedding_vectors], input_length=length, trainable=False)(inputs)
+    layer = Embedding(vocab_size, 100, weights=[embedding_vectors])(inputs)
     return layer

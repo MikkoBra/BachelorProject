@@ -2,6 +2,10 @@ from collections import Counter
 from pickle import dump
 from pickle import load
 from string import punctuation
+from imblearn.over_sampling import RandomOverSampler
+from data.graphs import class_percent_graph
+import os
+import numpy as np
 
 import nltk
 import pandas as pd
@@ -57,6 +61,11 @@ def clean_essay(essay, vocab):
 def convert_labels(labels):
     label_dict = {'sadness': 0, 'neutral': 1, 'fear': 2, 'disgust': 3, 'joy': 4, 'anger': 5, 'surprise': 6}
     return labels.replace(label_dict)
+
+
+def one_hot_to_text(one_hot_label):
+    label_dict = {0: 'sadness', 1: 'neutral', 2: 'fear', 3: 'disgust', 4: 'joy', 5: 'anger', 6: 'surprise'}
+    return label_dict.get(np.where(one_hot_label == 1)[0][0])
 
 
 # Cleans a text dataset and saves the cleaned data to a given filename
@@ -123,7 +132,6 @@ def max_length(data):
 # Encodes text to integers and pads the encoded text to a given max length
 def encode_and_pad(tokenizer, data, length):
     encoded = tokenizer.texts_to_sequences(data)
-    print(length)
     padded = pad_sequences(encoded, maxlen=length, padding='post')
     return padded
 
@@ -138,7 +146,6 @@ def preprocess_clean_data(x, y):
 
 
 # Cleans text datasets and saves them to local files
-# TODO: oversampling
 def create_clean_data():
     data = read_train_data()
     # data
@@ -150,21 +157,34 @@ def create_clean_data():
     print('Saved: datasets/all_data_clean.pkl')
 
 
+def oversample(x_train, y_train):
+    # Apply oversampling to the training data
+    oversampler = RandomOverSampler(sampling_strategy='not majority', random_state=1)
+    x_train_resampled, y_train_resampled = oversampler.fit_resample(x_train, y_train)
+    return x_train_resampled, y_train_resampled
+
+
 # 80/20 split data into train and test (x) data, with labels (y) for each
 def split_data(x, y, test_size):
-    return train_test_split(x, y, test_size=test_size, random_state=1)
+    x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=test_size, random_state=1)
+    x_train, y_train = oversample(x_train, y_train)
+    return x_train, x_test, y_train, y_test
 
 
 # Split data into train/test, and save into new .pkl files
 def save_train_test():
+    labels = ['sadness', 'neutral', 'fear', 'disgust', 'joy', 'anger', 'surprise']
     x, y = load_dataset('datasets/all_data_clean.pkl')
     clean_x, clean_y = preprocess_clean_data(x, y)
+    class_percent_graph(labels)
 
     x_train, x_test, y_train, y_test = split_data(clean_x, clean_y, 0.20)
+
     dump([x_train, y_train], open('datasets/train_data_clean.pkl', 'wb'))
     print('Saved: datasets/train_data_clean.pkl')
     dump([x_train, y_train], open('datasets/test_data_clean.pkl', 'wb'))
     print('Saved: datasets/test_data_clean.pkl')
+    class_percent_graph(labels, oversampled=True)
 
 
 # Turn a list of (sentence) strings into a 2D list of tokens
@@ -174,3 +194,17 @@ def sentences_to_lists(data):
         tokens = nltk.word_tokenize(sentence)
         tokenized.append(tokens)
     return tokenized
+
+
+def remove_file(file_path):
+    try:
+        os.remove(file_path)
+        print(f"File '{file_path}' deleted successfully.")
+    except OSError as e:
+        print(f"Error deleting the file '{file_path}': {e}")
+
+
+def one_hot_to_int(labels):
+    int_labels = np.argmax(labels, axis=1)
+    int_labels = int_labels.tolist()
+    return int_labels
