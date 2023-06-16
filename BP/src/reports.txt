@@ -1,29 +1,29 @@
 TRAIN TEST SPLIT
 
 
-mlp_w2v F1-score confusion matrix
-
-              precision    recall  f1-score   support
-
-     sadness       1.00      1.00      1.00       518
-     neutral       1.00      1.00      1.00       518
-        fear       1.00      1.00      1.00       518
-     disgust       1.00      1.00      1.00       518
-         joy       1.00      1.00      1.00       518
-       anger       1.00      1.00      1.00       518
-    surprise       1.00      1.00      1.00       518
-
-    accuracy                           1.00      3626
-   macro avg       1.00      1.00      1.00      3626
-weighted avg       1.00      1.00      1.00      3626
-
-
-
 mlp F1-score confusion matrix
 
               precision    recall  f1-score   support
 
      sadness       1.00      1.00      1.00       518
+     neutral       0.98      1.00      0.99       518
+        fear       1.00      1.00      1.00       518
+     disgust       1.00      1.00      1.00       518
+         joy       1.00      1.00      1.00       518
+       anger       1.00      1.00      1.00       518
+    surprise       1.00      0.98      0.99       518
+
+    accuracy                           1.00      3626
+   macro avg       1.00      1.00      1.00      3626
+weighted avg       1.00      1.00      1.00      3626
+
+
+
+rnn F1-score confusion matrix
+
+              precision    recall  f1-score   support
+
+     sadness       1.00      1.00      1.00       518
      neutral       1.00      1.00      1.00       518
         fear       1.00      1.00      1.00       518
      disgust       1.00      1.00      1.00       518
@@ -34,6 +34,114 @@ mlp F1-score confusion matrix
     accuracy                           1.00      3626
    macro avg       1.00      1.00      1.00      3626
 weighted avg       1.00      1.00      1.00      3626
+
+
+
+cnn F1-score confusion matrix
+
+              precision    recall  f1-score   support
+
+     sadness       1.00      1.00      1.00       518
+     neutral       1.00      1.00      1.00       518
+        fear       1.00      1.00      1.00       518
+     disgust       1.00      1.00      1.00       518
+         joy       1.00      1.00      1.00       518
+       anger       1.00      1.00      1.00       518
+    surprise       1.00      1.00      1.00       518
+
+    accuracy                           1.00      3626
+   macro avg       1.00      1.00      1.00      3626
+weighted avg       1.00      1.00      1.00      3626
+
+
+
+lstm F1-score confusion matrix
+
+              precision    recall  f1-score   support
+
+     sadness       1.00      1.00      1.00       518
+     neutral       1.00      1.00      1.00       518
+        fear       1.00      1.00      1.00       518
+     disgust       1.00      1.00      1.00       518
+         joy       1.00      1.00      1.00       518
+       anger       1.00      1.00      1.00       518
+    surprise       1.00      1.00      1.00       518
+
+    accuracy                           1.00      3626
+   macro avg       1.00      1.00      1.00      3626
+weighted avg       1.00      1.00      1.00      3626
+
+
+
+mlp_w2v F1-score confusion matrix
+
+              precision    recall  f1-score   support
+
+     sadness       1.00      0.99      0.99       518
+     neutral       1.00      1.00      1.00       518
+        fear       0.99      1.00      1.00       518
+     disgust       1.00      1.00      1.00       518
+         joy       1.00      1.00      1.00       518
+       anger       1.00      0.99      1.00       518
+    surprise       0.99      1.00      1.00       518
+
+    accuracy                           1.00      3626
+   macro avg       1.00      1.00      1.00      3626
+weighted avg       1.00      1.00      1.00      3626
+
+
+
+rnn_w2v F1-score confusion matrix
+
+              precision    recall  f1-score   support
+
+     sadness       0.98      1.00      0.99       518
+     neutral       0.98      0.97      0.98       518
+        fear       0.99      1.00      0.99       518
+     disgust       1.00      1.00      1.00       518
+         joy       1.00      1.00      1.00       518
+       anger       1.00      0.99      1.00       518
+    surprise       1.00      0.99      1.00       518
+
+    accuracy                           0.99      3626
+   macro avg       0.99      0.99      0.99      3626
+weighted avg       0.99      0.99      0.99      3626
+
+
+
+cnn_w2v F1-score confusion matrix
+
+              precision    recall  f1-score   support
+
+     sadness       1.00      1.00      1.00       518
+     neutral       1.00      1.00      1.00       518
+        fear       1.00      1.00      1.00       518
+     disgust       1.00      1.00      1.00       518
+         joy       1.00      1.00      1.00       518
+       anger       1.00      1.00      1.00       518
+    surprise       1.00      1.00      1.00       518
+
+    accuracy                           1.00      3626
+   macro avg       1.00      1.00      1.00      3626
+weighted avg       1.00      1.00      1.00      3626
+
+
+
+lstm_w2v F1-score confusion matrix
+
+              precision    recall  f1-score   support
+
+     sadness       1.00      1.00      1.00       518
+     neutral       0.99      0.99      0.99       518
+        fear       1.00      1.00      1.00       518
+     disgust       1.00      1.00      1.00       518
+         joy       1.00      1.00      1.00       518
+       anger       0.97      1.00      0.99       518
+    surprise       0.99      0.96      0.98       518
+
+    accuracy                           0.99      3626
+   macro avg       0.99      0.99      0.99      3626
+weighted avg       0.99      0.99      0.99      3626
 
 
 

@@ -19,22 +19,20 @@ def mlp_model(length, voc_size, tokenizer, w2v=False):
         embedding = embedding_layer(tokenizer, voc_size, inputs)
     else:
         embedding = Embedding(voc_size, 100)(inputs)
-    attention = Attention(name='attention')(embedding)
-    flat = Flatten()(attention)
-    # Dense layers
-    dense0 = Dense(128, activation='relu')(flat)
-    dense1 = Dense(64, activation='relu')(dense0)
+    attention = Attention(name="attention")(embedding)
     # Rest of the layers
-    model = model_output(dense1, inputs)
+    model = model_output(attention, inputs)
 
-    filename = 'images/mlp_w2v.png' if w2v else 'images/mlp.png'
+    filename = 'images/model architecture/mlp_w2v.png' if w2v else 'images/model architecture/mlp.png'
     plot_model(model, show_shapes=True, to_file=filename)
     return model
 
 
 def model_output(prev_layer, inputs):
     # Dense layers
-    dense2 = Dense(32, activation='relu')(prev_layer)
+    dense0 = Dense(128, activation='relu')(prev_layer)
+    dense1 = Dense(64, activation='relu')(dense0)
+    dense2 = Dense(32, activation='relu')(dense1)
     dense3 = Dense(16, activation='relu')(dense2)
     # Output layer
     outputs = Dense(units=7, activation='softmax')(dense3)

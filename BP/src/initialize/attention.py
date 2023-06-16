@@ -4,8 +4,14 @@ from keras.layers import Layer
 
 # Add attention layer to the deep learning network
 class Attention(Layer):
-    def __init__(self, **kwargs):
-        super(Attention, self).__init__(**kwargs)
+    def __init__(self, name=None, **kwargs):
+        super(Attention, self).__init__(name=name, **kwargs)
+
+    @classmethod
+    def from_config(cls, config):
+        # Remove the 'name' attribute from the config to avoid conflicts
+        config.pop('name', None)
+        return super(Attention, cls).from_config(config)
 
     def build(self, input_shape):
         self.W = self.add_weight(name='attention_weight', shape=(input_shape[-1], 1),

@@ -1,4 +1,4 @@
-from keras.layers import Embedding, Dense, Input, SimpleRNN
+from keras.layers import Embedding, Dense, Input, SimpleRNN, Reshape, Flatten
 from keras.models import Model
 from keras.utils import plot_model
 import tensorflow as tf
@@ -18,16 +18,33 @@ def rnn_model(length, voc_size, tokenizer, w2v=False):
         embedding = embedding_layer(tokenizer, voc_size, inputs)
     else:
         embedding = Embedding(voc_size, 100)(inputs)
-    # RNN layer
-    rnn = SimpleRNN(units=32, return_sequences=True)(embedding)
     # Attention layer
-    attention_layer = Attention()(rnn)
-    # Output layer
-    outputs = Dense(units=7, activation='softmax', trainable=True)(attention_layer)
-    model = Model(inputs, outputs)
+    attention = Attention(name="attention")(embedding)
+    reshaped = Reshape((-1, 100))(attention)
+    # RNN layer
+    rnn = SimpleRNN(units=32, return_sequences=True)(reshaped)
+    # Rest of the layers
+    model = model_output(rnn, inputs)
 
     # Compile
     model.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
-    filename = 'images/rnn_w2v.png' if w2v else 'images/rnn.png'
+    filename = 'images/model architecture/rnn_w2v.png' if w2v else 'images/model architecture/rnn.png'
     plot_model(model, show_shapes=True, to_file=filename)
+    return model
+
+
+def model_output(prev_layer, inputs):
+    # Dense layers
+    dense0 = Dense(128, activation='relu')(prev_layer)
+    dense1 = Dense(64, activation='relu')(dense0)
+    dense2 = Dense(32, activation='relu')(dense1)
+    dense3 = Dense(16, activation='relu')(dense2)
+    # Flatten layer
+    flattened = Flatten()(dense3)
+    # Output layer
+    outputs = Dense(units=7, activation='softmax')(flattened)
+    model = Model(inputs=inputs, outputs=outputs)
+
+    # Compile model
+    model.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
     return model

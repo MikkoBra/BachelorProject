@@ -27,16 +27,13 @@ def cnn_model(length, voc_size, tokenizer, w2v=False):
     merged = concatenate([flat1, flat2, flat3])
     # interpretation
     dense1 = Dense(10, activation='relu')(merged)
-    # Reshape to fit attention layer
-    reshaped = Reshape((1, 10))(dense1)
-    attention = Attention()(reshaped)
     # Output layer
-    outputs = Dense(units=7, activation='softmax')(attention)
+    outputs = Dense(units=7, activation='softmax')(dense1)
     model = Model(inputs=[inputs1, inputs2, inputs3], outputs=outputs)
 
     # compile
     model.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
-    filename = 'images/cnn_w2v.png' if w2v else 'images/cnn.png'
+    filename = 'images/model architecture/cnn_w2v.png' if w2v else 'images/model architecture/cnn.png'
     plot_model(model, show_shapes=True, to_file=filename)
     return model
 
@@ -50,8 +47,12 @@ def channel(length, voc_size, tokenizer, w2v, k_size):
         embedding = embedding_layer(tokenizer, voc_size, inputs)
     else:
         embedding = Embedding(voc_size, 100)(inputs)
+    attention = Attention(name="attention_"+str(k_size))(embedding)
+    # Reshape attention tensor
+    length = attention.shape[1]  # Get the length dynamically
+    attention_reshaped = Reshape((length, 1))(attention)
     # Convolutional layer
-    conv = Conv1D(filters=32, kernel_size=k_size, activation='relu')(embedding)
+    conv = Conv1D(filters=32, kernel_size=k_size, activation='relu')(attention_reshaped)
     # Dropout layer
     drop = Dropout(0.5)(conv)
     # Pooling layer

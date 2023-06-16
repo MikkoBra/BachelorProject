@@ -176,7 +176,7 @@ def save_train_test():
     labels = ['sadness', 'neutral', 'fear', 'disgust', 'joy', 'anger', 'surprise']
     x, y = load_dataset('datasets/all_data_clean.pkl')
     clean_x, clean_y = preprocess_clean_data(x, y)
-    class_percent_graph(labels)
+    # class_percent_graph(labels)
 
     x_train, x_test, y_train, y_test = split_data(clean_x, clean_y, 0.20)
 
@@ -184,7 +184,7 @@ def save_train_test():
     print('Saved: datasets/train_data_clean.pkl')
     dump([x_train, y_train], open('datasets/test_data_clean.pkl', 'wb'))
     print('Saved: datasets/test_data_clean.pkl')
-    class_percent_graph(labels, oversampled=True)
+    # class_percent_graph(labels, oversampled=True)
 
 
 # Turn a list of (sentence) strings into a 2D list of tokens
